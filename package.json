@@ -1,0 +1,26 @@
+{
+  "name": "dvsa-driving-test-cancellation-finder",
+  "description": "Find cancellation slots for UK (excl. NI) DVSA driving tests",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "Jack Burgess <me@jackburgess.dev>",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jack828/dvsa-driving-test-cancellation-finder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jack828/dvsa-driving-test-cancellation-finder/issues"
+  },
+  "homepage": "https://github.com/jack828/dvsa-driving-test-cancellation-finder#readme"
+}
