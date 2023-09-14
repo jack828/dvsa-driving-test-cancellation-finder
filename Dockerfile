@@ -18,7 +18,7 @@ USER node
 
 COPY --chown=node:node package.json yarn.lock ./
 
-RUN yarn install
+RUN yarn install --production
 
 COPY --chown=node:node index.js .
 
