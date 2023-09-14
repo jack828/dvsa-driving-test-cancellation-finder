@@ -5,7 +5,10 @@ const LICENCE_NUMBER = process.env.LICENCE_NUMBER
 const TEST_REF_NUMBER = process.env.TEST_REF_NUMBER
 
 ;(async () => {
-  const browser = await puppeteer.launch({ headless: false, slowMo: true })
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  })
   try {
     const page = await browser.newPage()
     await page.goto('https://www.gov.uk/change-driving-test')
