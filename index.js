@@ -1,11 +1,22 @@
 const puppeteer = require('puppeteer')
 const { format } = require('date-fns')
 
-const WIRE_PUSHER_ID = process.env.WIRE_PUSHER_ID
+const NTFY_TOPIC = process.env.NTFY_TOPIC
 const LICENCE_NUMBER = process.env.LICENCE_NUMBER
 const TEST_REF_NUMBER = process.env.TEST_REF_NUMBER
 
 const getDate = (id) => new Date(Number(id.substring(id.indexOf('-') + 1)))
+const notify = (title, body) =>
+  fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+    method: 'POST',
+    headers: {
+      Title: title,
+      Tags: 'warning,car',
+      Priority: 'default',
+      Actions: 'view, Book Now, https://driverpracticaltest.dvsa.gov.uk/login;'
+    },
+    body
+  })
 
 ;(async () => {
   const browser = await puppeteer.launch({
@@ -48,12 +59,13 @@ const getDate = (id) => new Date(Number(id.substring(id.indexOf('-') + 1)))
 
     const earlierSlots = availableSlots.filter((slot) => slot < currentSlot)
 
-    const msg = `Earlier slots available - ${earlierSlots
-      .map((slot) => format(slot, "EEE do MMM '@' p"))
-      .join(', ')}`
-    await fetch(
-      `https://wirepusher.com/send?id=${WIRE_PUSHER_ID}&title=DVSA Test&message=${msg}"`
-    )
+    if (earlierSlots.length !== 0) {
+      const msg = `Earlier slots available:\n${earlierSlots
+        .map((slot) => format(slot, "EEE do MMM '@' p"))
+        .join('\n')}`
+
+      await notify('DVSA Slot Alert', msg)
+    }
     await browser.close()
   } catch (error) {
     await browser.close()

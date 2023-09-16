@@ -15,7 +15,7 @@ $ sudo vi /etc/crontab
 
 You'll need to provide three important bits of information:
 
-WIRE_PUSHER_ID - If you want push notifications, set this <https://wirepusher.com> (Android only)
+NTFY_TOPIC - For push notifications, set this <https://ntfy.sh>
 LICENCE_NUMBER - Your driving license number
 TEST_REF_NUMBER - Your test booking reference number
 
