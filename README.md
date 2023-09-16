@@ -33,4 +33,6 @@ Jack Burgess <https://jackburgess.dev>
 
 MIT
 
-DVSA is an entity operated by the UK Government and it does not endorse or sanction the use of this tool to query for test slots. Abuse may get your IP blocked and you'll have to go to London and apologise to [_insert whoever is running the country_] and that'll be well embarrassing for you.
+## Disclaimer
+
+DVSA is an entity operated by the UK Government and it does not endorse or sanction the use of this tool to query for test slots. Abuse may get your IP blocked and you'll have to go to London and apologise to [_insert whoever is running the country_] and that'll be well embarrassing for you. It's not my fault if anything happens to you as a result of this tool.
