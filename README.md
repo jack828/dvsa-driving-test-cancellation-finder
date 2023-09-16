@@ -24,7 +24,7 @@ TEST_REF_NUMBER - Your test booking reference number
 Example crontab entry for once per hour checking between 6:00AM - 11:40PM (the times the service is online):
 
 ```
-// TODO
+30 6-23 * * * root docker run -e NTFY_TOPIC=blah -e LICENCE_NUMBER=CABE848311A11AA -e TEST_REF_NUMBER=12345678 jack828/dvsa-driving-test-cancellation-finder:latest
 ```
 
 ## Author
