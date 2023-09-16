@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "date-fns": "^2.30.0",
     "fetch-cookie": "^2.1.0",
     "node-fetch": "^3.3.2",
     "puppeteer": "^21.2.1"

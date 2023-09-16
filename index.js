@@ -1,8 +1,11 @@
 const puppeteer = require('puppeteer')
+const { format } = require('date-fns')
 
 const WIRE_PUSHER_ID = process.env.WIRE_PUSHER_ID
 const LICENCE_NUMBER = process.env.LICENCE_NUMBER
 const TEST_REF_NUMBER = process.env.TEST_REF_NUMBER
+
+const getDate = (id) => new Date(Number(id.substring(id.indexOf('-') + 1)))
 
 ;(async () => {
   const browser = await puppeteer.launch({
@@ -38,14 +41,18 @@ const TEST_REF_NUMBER = process.env.TEST_REF_NUMBER
 
     await page.waitForNavigation({ waitUntil: 'networkidle2' })
 
-    // LETS HOPE SO COS I AM BLOCKED :c
-    const earliestMonth = await page.$eval(
-      '.BookingCalendar-currentMonth',
-      (i) => i.innerText
-    )
-    console.log(earliestMonth)
+    const $slots = await page.$$('.SlotPicker-slots:not(:checked)')
+    const $currentSlot = await page.$$('.SlotPicker-slots:is(:checked)')
+    const currentSlot = getDate($currentSlot.id)
+    const availableSlots = $slots.map(($slot) => getDate($slot.id))
+
+    const earlierSlots = availableSlots.filter((slot) => slot < currentSlot)
+
+    const msg = `Earlier slots available - ${earlierSlots
+      .map((slot) => format(slot, "EEE do MMM '@' p"))
+      .join(', ')}`
     await fetch(
-      `https://wirepusher.com/send?id=${WIRE_PUSHER_ID}&title=DVSA Test&message=${earliestMonth}"`
+      `https://wirepusher.com/send?id=${WIRE_PUSHER_ID}&title=DVSA Test&message=${msg}"`
     )
     await browser.close()
   } catch (error) {
