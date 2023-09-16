@@ -16,7 +16,9 @@ $ sudo vi /etc/crontab
 You'll need to provide three important bits of information:
 
 NTFY_TOPIC - For push notifications, set this <https://ntfy.sh>
+
 LICENCE_NUMBER - Your driving license number
+
 TEST_REF_NUMBER - Your test booking reference number
 
 Example crontab entry for once per hour checking between 6:00AM - 11:40PM (the times the service is online):
