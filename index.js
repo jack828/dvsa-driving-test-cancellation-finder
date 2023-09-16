@@ -68,6 +68,7 @@ const notify = (title, body) =>
     }
     await browser.close()
   } catch (error) {
+    await notify('DVSA Check Error', error.message)
     await browser.close()
   }
 })()
