@@ -18,6 +18,17 @@ const notify = (title, body) =>
     body
   })
 
+const checkIfBlocked = async (page) => {
+  const iframeSrc = await page.evaluate(() => {
+    // eslint-disable-next-line no-undef
+    const iframe = document.querySelector('iframe#main-iframe')
+    return iframe.src
+  })
+  if (iframeSrc && iframeSrc.includes('_Incapsula_')) {
+    throw new Error('Blocked by Incapsula')
+  }
+}
+
 ;(async () => {
   const browser = await puppeteer.launch({
     headless: true,
@@ -25,13 +36,23 @@ const notify = (title, body) =>
   })
   try {
     const page = await browser.newPage()
-    await page.goto('https://www.gov.uk/change-driving-test')
+    page.setDefaultTimeout(10 * 1000)
+    console.log('Page opened')
 
+    await page.goto('https://www.gov.uk/change-driving-test')
     await page.waitForSelector('.govuk-button--start')
+    console.log('Gov UK page loaded')
+
     const startButton = await page.$('.govuk-button--start')
     await startButton.click()
 
+    await page.waitForNavigation({ waitUntil: 'networkidle2' })
+
+    await checkIfBlocked(page)
+
     await page.waitForSelector('#driving-licence-number')
+    console.log('DVSA login page loaded')
+
     const licenceField = await page.$('#driving-licence-number')
     await licenceField.type(LICENCE_NUMBER)
     const testRefField = await page.$('#application-reference-number')
@@ -40,7 +61,13 @@ const notify = (title, body) =>
     const loginButton = await page.$('#booking-login')
     await loginButton.click()
 
+    await page.waitForNavigation({ waitUntil: 'networkidle2' })
+
+    await checkIfBlocked(page)
+
     await page.waitForSelector('#date-time-change')
+    console.log('DVSA portal page loaded')
+
     const changeDateButton = await page.$('#date-time-change')
     await changeDateButton.click()
 
@@ -51,6 +78,9 @@ const notify = (title, body) =>
     await continueButton.click()
 
     await page.waitForNavigation({ waitUntil: 'networkidle2' })
+
+    await checkIfBlocked(page)
+    console.log('DVSA time page page loaded')
 
     const $slots = await page.$$('.SlotPicker-slots:not(:checked)')
     const $currentSlot = await page.$$('.SlotPicker-slots:is(:checked)')
@@ -64,10 +94,14 @@ const notify = (title, body) =>
         .map((slot) => format(slot, "EEE do MMM '@' p"))
         .join('\n')}`
 
+      console.log(msg)
       await notify('DVSA Slot Alert', msg)
+    } else {
+      console.log('No slots available')
     }
     await browser.close()
   } catch (error) {
+    console.log('Error: ', error)
     await notify('DVSA Check Error', error.message)
     await browser.close()
   }

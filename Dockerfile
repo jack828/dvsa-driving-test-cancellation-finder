@@ -1,4 +1,5 @@
-FROM ghcr.io/puppeteer/puppeteer:latest
+# TODO doesnt work
+FROM node:18-alpine
 
 ENV CHROME_BIN="/usr/bin/chromium-browser"
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
@@ -8,6 +9,7 @@ WORKDIR /app
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
     libnss3 \
     libgconf-2-4 \
     libfreetype6 \
